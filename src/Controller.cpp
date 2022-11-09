@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -136,7 +136,7 @@ namespace vhip_walking
       stabilizer_.addGUIElements(gui_);
     }
 
-    LOG_SUCCESS("VHIPWalking controller init done " << this)
+    mc_rtc::log::success("VHIPWalking controller init done.");
   }
 
   void Controller::addLogEntries(mc_rtc::Logger & logger)
@@ -200,9 +200,9 @@ namespace vhip_walking
     // (1) update floating-base transforms of both robot mbc's
     auto X_0_fb = supportContact().robotTransform(controlRobot());
     controlRobot().posW(X_0_fb);
-    controlRobot().setBaseLinkVelocity(Eigen::Vector6d::Zero());
+    controlRobot().velW(sva::MotionVecd::Zero());
     realRobot().posW(X_0_fb);
-    realRobot().setBaseLinkVelocity(Eigen::Vector6d::Zero());
+    realRobot().velW(sva::MotionVecd::Zero());
 
     // (2) update contact frames to coincide with surface ones
     loadFootstepPlan(plan.name);
@@ -243,7 +243,7 @@ namespace vhip_walking
     double maxRatioVar = 1.5 * timeStep / plan.doubleSupportDuration();
     if (std::abs(ratio - leftFootRatio_) > maxRatioVar)
     {
-      LOG_WARNING("Left foot ratio jumped from " << leftFootRatio_ << " to " << ratio);
+      mc_rtc::log::warning("Left foot ratio jumped from {} to {}", leftFootRatio_, ratio);
       leftFootRatioJumped_ = true;
     }
     leftFootRatio_ = clamp(ratio, 0., 1., "leftFootRatio");
@@ -295,21 +295,21 @@ namespace vhip_walking
     constexpr double MAX_HEIGHT_DIFF = 0.02; // [m]
     if (pauseWalking)
     {
-      LOG_WARNING("Already pausing, how did you get there?");
+      mc_rtc::log::warning("Already pausing, how did you get there?");
       return;
     }
     else if (std::abs(supportContact().z() - targetContact().z()) > MAX_HEIGHT_DIFF)
     {
       if (!pauseWalkingRequested || verbose)
       {
-        LOG_WARNING("Cannot pause on uneven ground, will pause later");
+        mc_rtc::log::warning("Cannot pause on uneven ground, will pause later");
       }
       gui()->removeElement({"Walking", "Controller"}, "Pause walking");
       pauseWalkingRequested = true;
     }
     else if (pauseWalkingRequested)
     {
-      LOG_WARNING("Pausing now that contacts are at same level");
+      mc_rtc::log::warning("Pausing now that contacts are at same level");
       pauseWalkingRequested = false;
       pauseWalking = true;
     }
@@ -330,7 +330,7 @@ namespace vhip_walking
     {
       if (!isInTheAir)
       {
-        LOG_WARNING("Robot is in the air");
+        mc_rtc::log::warning("Robot is in the air");
         isInTheAir = true;
       }
     }
@@ -338,7 +338,7 @@ namespace vhip_walking
     {
       if (isInTheAir)
       {
-        LOG_INFO("Robot is on the ground again");
+        mc_rtc::log::info("Robot is on the ground again");
         isInTheAir = false;
       }
     }
@@ -377,7 +377,7 @@ namespace vhip_walking
     plan.updateInitialTransform(X_0_lc, X_0_rc, initHeight);
     plan.rewind();
     torsoPitch_ = (plan.hasTorsoPitch()) ? plan.torsoPitch() : defaultTorsoPitch_;
-    LOG_INFO("Loaded footstep plan \"" << name << "\"");
+    mc_rtc::log::info("Loaded footstep plan \"{}\"", name);
   }
 
   void Controller::startLogSegment(const std::string & label)

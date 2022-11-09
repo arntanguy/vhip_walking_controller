@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -110,7 +110,7 @@ namespace vhip_walking
   {
     if (std::abs(x_[2] - 1.) > 1e-10 || rate_ <= 0. || rate_ >= 1.)
     {
-      LOG_ERROR("HRP4ForceCalibrator parameters are wrong");
+      mc_rtc::log::error("HRP4ForceCalibrator parameters are wrong");
     }
     if (nbSamples_ == 0)
     {

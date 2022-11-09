@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -146,8 +146,7 @@ namespace vhip_walking
     }
     else
     {
-      LOG_WARNING("Estimated mass " << massEstimator_.avg() << " [kg] "
-          << "too far away from model mass " << ctl.controlRobot().mass() << " [kg]");
+      mc_rtc::log::warning("Estimated mass {} [kg] too far away from model mass {} [kg]", massEstimator_.avg(), ctl.controlRobot().mass());
       isWeighing_ = true;
       hideStartStandingButton();
     }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -167,7 +167,7 @@ namespace vhip_walking
       }
       else
       {
-        LOG_ERROR("Cannot compute anklePos for surface " << surfaceName);
+        mc_rtc::log::error("Cannot compute anklePos for surface {}", surfaceName);
         return p();
       }
     }
@@ -334,7 +334,7 @@ namespace vhip_walking
       auto & localHrepVec = local.second;
       if ((normal() - world::e_z).norm() > 1e-3)
       {
-        LOG_WARNING("Contact is not horizontal");
+        mc_rtc::log::warning("Contact is not horizontal");
       }
       const sva::PTransformd & X_0_c = pose;
       worldHrepMat = localHrepMat * X_0_c.rotation().topLeftCorner<2, 2>();

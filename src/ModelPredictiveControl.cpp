@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -30,6 +30,7 @@
 #include <vhip_walking/ModelPredictiveControl.h>
 #include <vhip_walking/utils/clamp.h>
 #include <vhip_walking/utils/rotations.h>
+#include <mc_rtc/gui.h>
 
 namespace vhip_walking
 {
@@ -59,7 +60,7 @@ namespace vhip_walking
     initState_ = Eigen::VectorXd::Zero(6);
     previewSystem_ = std::make_shared<copra::PreviewSystem>(
         stateMatrix, inputMatrix, biasVector, initState_, NB_STEPS);
-    LOG_SUCCESS("Initialized new ModelPredictiveControl solver");
+    mc_rtc::log::success("Initialized new ModelPredictiveControl solver");
   }
 
   void ModelPredictiveControl::configure(const mc_rtc::Configuration & config)
@@ -99,7 +100,7 @@ namespace vhip_walking
       ComboInput(
         "QP solver",
         {"QuadProgDense", "QLD", "LSSOL"},
-        [this]()
+        [this]() -> std::string
         {
           switch (solver_)
           {
@@ -367,7 +368,7 @@ namespace vhip_walking
     }
     else
     {
-      LOG_ERROR("Model predictive control problem has no solution");
+      mc_rtc::log::error("Model predictive control problem has no solution");
       solution_.reset(new ModelPredictiveControlSolution(initState_));
     }
 
@@ -396,7 +397,7 @@ namespace vhip_walking
   {
     if (stateTraj.size() / STATE_SIZE != 1 + jerkTraj.size() / INPUT_SIZE)
     {
-      LOG_ERROR("Invalid state/input sizes, respectively " << stateTraj.size() << " and " << jerkTraj.size());
+      mc_rtc::log::error("Invalid state/input sizes, respectively {} and {}", stateTraj.size(), jerkTraj.size());
     }
     jerkTraj_ = jerkTraj;
     stateTraj_ = stateTraj;
@@ -435,7 +436,7 @@ namespace vhip_walking
     Eigen::Vector2d comdd_f = lastState.segment<2>(4);
     if (std::abs(comd_f.x() * comdd_f.y() - comd_f.y() * comdd_f.x()) > 1e-4)
     {
-      LOG_WARNING("MPC terminal condition is not properly fulfilled");
+      mc_rtc::log::warning("MPC terminal condition is not properly fulfilled");
     }
     double omega_f = -comd_f.dot(comdd_f) / comd_f.dot(comd_f);
     double lambda_f = std::pow(omega_f, 2);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -31,7 +31,7 @@
 
 #include <SpaceVecAlg/SpaceVecAlg>
 
-#include <mc_rtc/GUIState.h>
+#include <mc_rtc/gui.h>
 #include <mc_rtc/log/Logger.h>
 
 namespace vhip_walking

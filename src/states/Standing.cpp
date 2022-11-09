@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -59,8 +59,7 @@ namespace vhip_walking
     }
     else
     {
-      LOG_ERROR_AND_THROW(std::invalid_argument,
-          "Unknown surface name: " << supportContact.surfaceName);
+      mc_rtc::log::error_and_throw<std::invalid_argument>("Unknown surface name: {}", supportContact.surfaceName);
     }
 
     if (ctl.isLastDSP())
@@ -227,7 +226,7 @@ namespace vhip_walking
   {
     if (controller().stabilizer().contactState() != ContactState::DoubleSupport)
     {
-      LOG_ERROR("Cannot update CoM target while in single support");
+      mc_rtc::log::error("Cannot update CoM target while in single support");
       return;
     }
     leftFootRatio = clamp(leftFootRatio, 0., 1., "Standing target");
@@ -241,7 +240,7 @@ namespace vhip_walking
     auto & stabilizer = controller().stabilizer();
     if (footTask->admittance().couple().x() > 1e-10 || stabilizer.detectTouchdown(footTask, contact))
     {
-      LOG_WARNING("Foot is already in contact");
+      mc_rtc::log::warning("Foot is already in contact");
       return;
     }
     stabilizer.setSwingFoot(footTask);
@@ -267,12 +266,12 @@ namespace vhip_walking
     auto & stabilizer = controller().stabilizer();
     if (footTask->admittance().couple().x() < 1e-10)
     {
-      LOG_WARNING("Foot contact is already released");
+      mc_rtc::log::warning("Foot contact is already released");
       return false;
     }
     else if (footTask->measuredWrench().force().z() > MAX_FOOT_RELEASE_PRESSURE)
     {
-      LOG_ERROR("Contact pressure is too high to release foot");
+      mc_rtc::log::error("Contact pressure is too high to release foot");
       return false;
     }
     sva::PTransformd X_0_f = footTask->surfacePose();
@@ -329,7 +328,7 @@ namespace vhip_walking
     auto & ctl = controller();
     if (ctl.isLastSSP())
     {
-      LOG_ERROR("No footstep in contact plan");
+      mc_rtc::log::error("No footstep in contact plan");
       return;
     }
     startWalking_ = true;

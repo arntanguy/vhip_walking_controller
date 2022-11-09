@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -29,6 +29,7 @@
 
 #include <vhip_walking/Stabilizer.h>
 #include <vhip_walking/utils/clamp.h>
+#include <mc_rtc/gui.h>
 
 namespace vhip_walking
 {
@@ -429,7 +430,7 @@ namespace vhip_walking
     }
     else
     {
-      LOG_ERROR("Unknown foot surface: " << footTask->surface());
+      mc_rtc::log::warning("Unknown foot surface: {}", footTask->surface());
     }
   }
 
@@ -658,7 +659,7 @@ namespace vhip_walking
       0., 0., 0., 0., 0., 0., 0., 0., 1., 0.,
       0., 0., 0., 0., 0., 0., 0., 0., 0., std::sqrt(1e-3),
     b.setZero(3);
-    
+
     unsigned nbConstraints = 3 + 3 + 1 + zmpArea_.first.rows() + 1;
     Eigen::VectorXd bl, bu;
     bl.setConstant(NB_VARIABLES + nbConstraints, -1e5);
@@ -724,7 +725,7 @@ namespace vhip_walking
     Eigen::Vector3d refFrameZMP = zmpFrame_.rotation() * (pendulum_.zmp() - zmpFrame_.translation());
     if (std::abs(refFrameZMP.z()) > 1e-3)
     {
-      LOG_WARNING("Reference ZMP does not belong to the ZMP frame");
+      mc_rtc::log::warning("Reference ZMP does not belong to the ZMP frame");
     }
 
     curRow += curHeight;
@@ -745,14 +746,14 @@ namespace vhip_walking
     curRow += curHeight;
     if (curRow != nbConstraints)
     {
-      LOG_ERROR("Invalid number of constraints in VHIP feedback QP");
+      mc_rtc::log::error("Invalid number of constraints in VHIP feedback QP");
     }
 
     bool solverSuccess = leastSquares_.solve(A, b, C, bl, bu);
     Eigen::VectorXd Delta_x = leastSquares_.result();
     if (!solverSuccess)
     {
-      LOG_ERROR("VHIP feedback QP failed to run");
+      mc_rtc::log::error("VHIP feedback QP failed to run");
       leastSquares_.print_inform();
       return computeLIPDesiredWrench();
     }
@@ -887,7 +888,7 @@ namespace vhip_walking
     Eigen::VectorXd x = leastSquares_.result();
     if (!solverSuccess)
     {
-      LOG_ERROR("DS force distribution QP failed to run");
+      mc_rtc::log::error("DS force distribution QP failed to run");
       return;
     }
 
@@ -940,7 +941,7 @@ namespace vhip_walking
     Eigen::VectorXd x = leastSquares_.result();
     if (leastSquares_.inform() != Eigen::lssol::eStatus::STRONG_MINIMUM)
     {
-      LOG_ERROR("SS force distribution QP failed to run");
+      mc_rtc::log::error("SS force distribution QP failed to run");
       return;
     }
 

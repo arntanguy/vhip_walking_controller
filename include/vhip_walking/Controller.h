@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -69,7 +69,7 @@ namespace vhip_walking
    */
   struct MC_CONTROL_DLLAPI Controller : public mc_control::fsm::Controller
   {
-    /** Initialization of the controller. 
+    /** Initialization of the controller.
      *
      * \param robot Robot model.
      *
@@ -295,7 +295,7 @@ namespace vhip_walking
      */
     mc_rbdyn::Robot & realRobot()
     {
-      return real_robots->robot();
+      return MCController::realRobot();
     }
 
     /** Get next SSP duration.

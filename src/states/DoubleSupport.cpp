@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -160,7 +160,7 @@ namespace vhip_walking
     }
     else
     {
-      LOG_WARNING("No capture trajectory, resuming walking");
+      mc_rtc::log::warning("No capture trajectory, resuming walking");
       stopDuringThisDSP_ = false;
     }
   }
