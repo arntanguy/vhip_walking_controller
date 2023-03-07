@@ -57,34 +57,25 @@ set(CONTROLLER_HDR
     ${CMAKE_CURRENT_SOURCE_DIR}/../include/vhip_walking/utils/rotations.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../include/vhip_walking/utils/stats.h)
 
-set(CONTROLLER_NAME "${PROJET_NAME}_controller")
-
 add_library(${PROJECT_NAME} SHARED ${CONTROLLER_SRC} ${CONTROLLER_HDR})
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DMC_CONTROL_EXPORTS")
-add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} copra::copra eigen-lssol::eigen-lssol mc_rtc::mc_control_fsm)
-install(TARGETS ${PROJECT_NAME} DESTINATION ${MC_RTC_LIBDIR}/mc_controller)
+target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include> $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
+target_link_libraries(${PROJECT_NAME} PUBLIC copra::copra eigen-lssol::eigen-lssol mc_rtc::mc_control_fsm PkgConfig::geometry_msgs PkgConfig::roscpp PkgConfig::roslib PkgConfig::std_msgs PkgConfig::tf)
+install(TARGETS ${PROJECT_NAME} DESTINATION "${MC_RTC_LIBDIR}")
 
-add_library(${CONTROLLER_NAME} SHARED lib.cpp)
-set_target_properties(${CONTROLLER_NAME}
-  PROPERTIES
-    PREFIX ""
-    OUTPUT_NAME "${PROJECT_NAME}"
-    LIBRARY_OUTPUT_DIRECTORY "${CATKIN_DEVEL_PREFIX}/lib/${PROJECT_NAME}")
-target_link_libraries(${CONTROLLER_NAME} ${PROJECT_NAME})
-install(TARGETS ${CONTROLLER_NAME} DESTINATION ${MC_RTC_LIBDIR}/mc_controller)
+add_controller(${PROJECT_NAME}_controller lib.cpp "")
+set_target_properties(${PROJECT_NAME}_controller PROPERTIES OUTPUT_NAME "${PROJECT_NAME}")
+target_link_libraries(${PROJECT_NAME}_controller PUBLIC ${PROJECT_NAME})
 
-set(CONF_OUT "$ENV{HOME}/.config/mc_rtc/controllers/VHIPWalking.conf")
-set(AROBASE "@")
-set(VHIP_WALKING_STATES_DIR "${CATKIN_DEVEL_PREFIX}/lib/${PROJECT_NAME}/states/")
-set(VHIP_WALKING_STATES_DATA_DIR "${vhip_walkING_STATES_DIR}/data")
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/../etc/VHIPWalking.conf.cmake" "${CONF_OUT}")
-unset(AROBASE)
-
-set(VHIP_WALKING_STATES_DIR "${MC_RTC_LIBDIR}/mc_controller/${PROJECT_NAME}/states")
-set(VHIP_WALKING_STATES_DATA_DIR "${vhip_walkING_STATES_DIR}/data")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/../etc/VHIPWalking.conf.cmake" "${CMAKE_CURRENT_BINARY_DIR}/etc/VHIPWalking.conf")
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/VHIPWalking.conf"
-    DESTINATION "${MC_RTC_LIBDIR}/mc_controller/etc/")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/etc/VHIPWalking.conf" DESTINATION "${MC_RTC_LIBDIR}/mc_controller/etc/")
 
 add_subdirectory(states)
+
+install(TARGETS ${PROJECT_NAME}
+  EXPORT "${TARGETS_EXPORT_NAME}"
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
+
+install(
+  DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION include)

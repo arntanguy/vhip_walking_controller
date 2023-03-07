@@ -340,4 +340,4 @@ namespace vhip_walking
   }
 }
 
-EXPORT_SINGLE_STATE("Standing", vhip_walking::states::Standing)
+EXPORT_SINGLE_STATE("VHIP::Standing", vhip_walking::states::Standing)

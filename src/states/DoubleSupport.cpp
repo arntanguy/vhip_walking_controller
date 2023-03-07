@@ -166,4 +166,4 @@ namespace vhip_walking
   }
 }
 
-EXPORT_SINGLE_STATE("DoubleSupport", vhip_walking::states::DoubleSupport)
+EXPORT_SINGLE_STATE("VHIP::DoubleSupport", vhip_walking::states::DoubleSupport)

@@ -170,4 +170,4 @@ namespace vhip_walking
   }
 }
 
-EXPORT_SINGLE_STATE("Initial", vhip_walking::states::Initial)
+EXPORT_SINGLE_STATE("VHIP::Initial", vhip_walking::states::Initial)

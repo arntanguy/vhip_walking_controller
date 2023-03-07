@@ -480,8 +480,7 @@
   {
     "ground":
     {
-      "module": "env",
-      "params": ["@AROBASE@MC_ENV_DESCRIPTION@AROBASE@", "ground"]
+      "module": "env/ground"
     }
   },
 
@@ -489,16 +488,16 @@
   // Finite state machine
   //
 
-  "init": "Initial",
+  "init": "VHIP::Initial",
   "states": {},
   "configs": {},
   "transitions":
   [
-    ["Initial", "Standing", "Standing"],
-    ["Standing", "DoubleSupport", "DoubleSupport"],
-    ["DoubleSupport", "SingleSupport", "SingleSupport"],
-    ["DoubleSupport", "Standing", "Standing"],
-    ["SingleSupport", "DoubleSupport", "DoubleSupport"]
+    ["VHIP::Initial", "Standing", "VHIP::Standing"],
+    ["VHIP::Standing", "DoubleSupport", "VHIP::DoubleSupport"],
+    ["VHIP::DoubleSupport", "SingleSupport", "VHIP::SingleSupport"],
+    ["VHIP::DoubleSupport", "Standing", "VHIP::Standing"],
+    ["VHIP::SingleSupport", "DoubleSupport", "VHIP::DoubleSupport"]
   ],
 
   // When true, the FSM transitions are managed by an external tool
@@ -508,10 +507,10 @@
   "StepByStep": false,
 
   // Where to look for state libraries
-  "StatesLibraries": ["@MC_RTC_LIBDIR@/mc_controller/vhip_walking_controller/states"],
+  "StatesLibraries": ["@MC_STATES_DEFAULT_INSTALL_PREFIX@", "@MC_CONTROLLER_INSTALL_PREFIX@/vhip_walking_controller/states"],
 
   // Where to look for state files
-  "StatesFiles": [],
+  "StatesFiles": ["@MC_STATES_DEFAULT_INSTALL_PREFIX@/data", "@MC_CONTROLLER_INSTALL_PREFIX@/vhip_walking_controller/states/data"],
 
   // When true, state factory will be more verbose
   "VerboseStateFactory": true,

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -183,4 +183,4 @@ namespace vhip_walking
   }
 }
 
-EXPORT_SINGLE_STATE("SingleSupport", vhip_walking::states::SingleSupport)
+EXPORT_SINGLE_STATE("VHIP::SingleSupport", vhip_walking::states::SingleSupport)

@@ -23,29 +23,33 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
-set(CMAKE_CXX_FLAGS "-pedantic -Wno-long-long -Wall -Wextra -Wcast-align -Wcast-qual -Wformat -Wwrite-strings -Wconversion")
-set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-include(cmake/base.cmake)
-include(cmake/boost.cmake)
+set(CMAKE_CXX_STANDARD 17)
 
 set(PROJECT_NAME vhip_walking_controller)
 set(PROJECT_DESCRIPTION "Walking controller based on variable-height inverted pendulum tracking")
 set(PROJECT_URL https://github.com/stephane-caron/vhip_walking_controller/)
 set(PROJECT_VERSION 0.8.0)
+set(PROJECT_USE_CMAKE_EXPORT TRUE)
+set(INSTALL_DOCUMENTATION OFF CACHE BOOL "")
+set(INSTALL_GENERATED_HEADERS OFF CACHE BOOL "" FORCE)
+set(INSTALL_PKG_CONFIG_FILE OFF CACHE BOOL "" FORCE)
+set(CXX_DISABLE_WERROR ON)
 
-project(${PROJECT_NAME})  # because setup_project() is not called
+include(cmake/base.cmake)
 
-find_package(catkin REQUIRED COMPONENTS roscpp)
+project(${PROJECT_NAME} CXX)
+
 find_package(copra REQUIRED)
 find_package(mc_rtc REQUIRED)
 
-catkin_package(CATKIN_DEPENDS geometry_msgs roscpp roslib std_msgs tf)
-
-include_directories(include ${catkin_INCLUDE_DIRS} $ENV{HOME}/.local/include)
-link_directories(${catkin_LIBRARY_DIRS} $ENV{HOME}/.local/lib)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(geometry_msgs REQUIRED IMPORTED_TARGET geometry_msgs)
+pkg_check_modules(roscpp REQUIRED IMPORTED_TARGET roscpp)
+pkg_check_modules(roslib REQUIRED IMPORTED_TARGET roslib)
+pkg_check_modules(std_msgs REQUIRED IMPORTED_TARGET std_msgs)
+pkg_check_modules(tf REQUIRED IMPORTED_TARGET tf)
 
 add_subdirectory(src)

@@ -412,5 +412,3 @@ namespace vhip_walking
     }
   }
 }
-
-CONTROLLER_CONSTRUCTOR("VHIPWalking", vhip_walking::Controller)

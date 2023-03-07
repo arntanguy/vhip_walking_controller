@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2018-2019, CNRS-UM LIRMM
  * All rights reserved.
  *
@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "Controller.h"
+#include <vhip_walking/Controller.h>
 
 namespace vhip_walking
 {
