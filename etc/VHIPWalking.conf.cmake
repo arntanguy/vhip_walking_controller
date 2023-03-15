@@ -500,6 +500,22 @@
     ["VHIP::SingleSupport", "DoubleSupport", "VHIP::DoubleSupport"]
   ],
 
+  "ObserverPipelines":
+  [
+  {
+    "name": "IMUObserver",
+    "gui": true,
+    "observers": [
+      {
+        "type": "Encoder"
+      },
+      {
+        "type": "Attitude"
+      }
+    ]
+  }
+  ],
+
   // When true, the FSM transitions are managed by an external tool
   "Managed": false,
 
